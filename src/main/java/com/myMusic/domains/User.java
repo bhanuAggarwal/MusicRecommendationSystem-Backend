@@ -3,6 +3,8 @@
  */
 package com.myMusic.domains;
 
+import java.sql.Timestamp;
+
 
 /**
  * @author bhanu
@@ -14,23 +16,27 @@ public class User {
 	String name;
 	String email;
 	String password;
+	Timestamp creation_time;
 	
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", email=" + email
-				+ ", password=" + password + "]";
+				+ ", password=" + password + ", creation_time=" + creation_time
+				+ "]";
 	}
 
 	public User() {
 		super();
 	}
 
-	public User(Integer id, String name, String email, String password) {
+	public User(Integer id, String name, String email, String password,
+			Timestamp creation_time) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		this.creation_time = creation_time;
 	}
 
 	public Integer getId() {
@@ -65,6 +71,15 @@ public class User {
 		this.password = password;
 	}
 	
+	
+	public Timestamp getCreation_time() {
+		return creation_time;
+	}
+
+	public void setCreation_time(Timestamp creation_time) {
+		this.creation_time = creation_time;
+	}
+
 	/**
 	 * This function will validate the email if of user
 	 * 
