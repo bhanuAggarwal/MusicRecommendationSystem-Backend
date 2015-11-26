@@ -1,6 +1,5 @@
 package com.myMusic.domains;
 
-import java.sql.Timestamp;
 
 /**
  * 
@@ -17,14 +16,13 @@ public class Song {
 	Double rating;
 	Integer no_rating;
 	String tags;
-	Timestamp creation_time;
 	
 	public Song() {
 		super();
 	}
 
 	public Song(Integer id, String name, String location, Integer category,
-			String artist, Double rating, Integer no_rating ,String tags, Timestamp creation_time) {
+			String artist, Double rating, Integer no_rating ,String tags) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -33,7 +31,6 @@ public class Song {
 		this.artist = artist;
 		this.rating = rating;
 		this.tags = tags;
-		this.creation_time = creation_time;
 		this.no_rating = no_rating;
 	}
 
@@ -41,8 +38,7 @@ public class Song {
 	public String toString() {
 		return "Song [id=" + id + ", name=" + name + ", location=" + location
 				+ ", category=" + category + ", artist=" + artist + ", rating="
-				+ rating + ", no_rating=" + no_rating + ", tags=" + tags
-				+ ", creation_time=" + creation_time + "]";
+				+ rating + ", no_rating=" + no_rating + ", tags=" + tags + "]";
 	}
 
 	public Integer getId() {
@@ -99,14 +95,6 @@ public class Song {
 
 	public void setTags(String tags) {
 		this.tags = tags;
-	}
-
-	public Timestamp getCreation_time() {
-		return creation_time;
-	}
-
-	public void setCreation_time(Timestamp creation_time) {
-		this.creation_time = creation_time;
 	}
 
 	public Integer getNo_rating() {

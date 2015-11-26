@@ -145,7 +145,15 @@ public class SongServiceImpl implements SongService{
 				previousSession = sessionService.getUserCurrentSession(userId);
 				sessionString = "%" + previousSession.getSession() + ",%";
 				sessionsList = sessionService.getSimilarSessions(sessionString);
-				
+				while(sessionsList.size() == 0 && previousSession.getSession().length() > 1){
+					int length = previousSession.getSession().length();
+					previousSession.setSession(previousSession.getSession().substring(length/2));
+					if(previousSession.getSession().charAt(0) == ','){
+						previousSession.setSession(previousSession.getSession().substring(1));
+					}
+					sessionString = "%" + previousSession.getSession() + ",%";
+					sessionsList = sessionService.getSimilarSessions(sessionString);
+				}
 				for(int i = 0; i < sessionsList.size(); i++){
 					String[] sessionTemp = sessionsList.get(i).split(previousSession.getSession() + ",");
 					sessionsList.set(i, sessionTemp[1]);
@@ -160,9 +168,10 @@ public class SongServiceImpl implements SongService{
 				Map<String,Integer> Map = sortByComparator(songMap);
 				Set<String> songsSet = Map.keySet();
 				Iterator<String> it = songsSet.iterator();
-				for(int i = songsSet.size() - 1	; i >= 0; i--){
+				for(int i = 0; i < songsSet.size(); i++){
 					songsList.add(i, songMapper.getSongById(Integer.parseInt(it.next().toString())));
 				}	
+				Collections.reverse(songsList);
 			}catch(Exception e){
 				LOG.info("Error in Song Services " + e);
 			}
