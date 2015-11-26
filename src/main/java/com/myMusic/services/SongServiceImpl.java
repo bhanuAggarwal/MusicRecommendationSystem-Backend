@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,7 +147,7 @@ public class SongServiceImpl implements SongService{
 				sessionsList = sessionService.getSimilarSessions(sessionString);
 				
 				for(int i = 0; i < sessionsList.size(); i++){
-					String[] sessionTemp = sessionsList.get(i).split(previousSession.getSession());
+					String[] sessionTemp = sessionsList.get(i).split(previousSession.getSession() + ",");
 					sessionsList.set(i, sessionTemp[1]);
 					sessionTemp = sessionsList.get(i).split(",");
 					if(songMap.containsKey(sessionTemp[0])){
@@ -159,9 +158,9 @@ public class SongServiceImpl implements SongService{
 					}
 				}
 				Map<String,Integer> Map = sortByComparator(songMap);
-				Set songsSet = Map.keySet();
-				Iterator it = songsSet.iterator();
-				for(int i = songsSet.size(); i >= 0; i--){
+				Set<String> songsSet = Map.keySet();
+				Iterator<String> it = songsSet.iterator();
+				for(int i = songsSet.size() - 1	; i >= 0; i--){
 					songsList.add(i, songMapper.getSongById(Integer.parseInt(it.next().toString())));
 				}	
 			}catch(Exception e){

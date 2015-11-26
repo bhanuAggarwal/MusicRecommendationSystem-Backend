@@ -45,7 +45,7 @@ public interface SongMapper {
 			+ " FROM song_listen sl JOIN songs s ON sl.song_id = s.id")
 	List<SongListen> getSongsListen();
 
-	@Update("UPDATE songs SET rating = #{rating} WHERE id = #{id}")
+	@Update("UPDATE songs SET rating = #{rating}, no_rating = no_rating + 1 WHERE id = #{id}")
 	Integer updateSongRating(Song song);
 
 	@Select("SELECT * FROM songs WHERE id = #{songId}")

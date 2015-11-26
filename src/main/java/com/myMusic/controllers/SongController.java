@@ -42,27 +42,32 @@ public class SongController {
 	public List<Song> getPopularSongs(@PathVariable String type,
 			@RequestParam(value = "userId" , required = false) Integer userId){
 		List<Song> list = new ArrayList<Song>();
-		try{
-			if(type.equals("popular")){
-				list = songService.getPopularSongs();
+		if(type != null){
+			try{
+				if(type.equals("popular")){
+					list = songService.getPopularSongs();
+				}
+				else if(type.equals("new")){
+					list = songService.getNewSongs();
+				}
+				else if(type.equals("nextRecommended")){
+					list = songService.getNextRecommendedSongs(userId);
+				}
+				else if(type.equals("recommendedForUser")){
+					list = songService.getRecommendedSongsForUser(userId);
+				}
+				else if(type.equals("default")){
+					list = songService.getSongsByDefault();
+				}
+				else{
+					LOG.info("Wrong Type Specified");
+				}
+			}catch(Exception e){
+				LOG.info("Error in Song Controller " + e);
 			}
-			else if(type.equals("new")){
-				list = songService.getNewSongs();
-			}
-			else if(type.equals("nextRecommended")){
-				list = songService.getNextRecommendedSongs(userId);
-			}
-			else if(type.equals("recommendedForUser")){
-				list = songService.getRecommendedSongsForUser(userId);
-			}
-			else if(type.equals("default")){
-				list = songService.getSongsByDefault();
-			}
-			else{
-				LOG.info("Wrong Type Specified");
-			}
-		}catch(Exception e){
-			LOG.info("Error in Song Controller " + e);
+		}
+		else{
+			LOG.info("Some Param Missing");
 		}
 		return list;
 	}

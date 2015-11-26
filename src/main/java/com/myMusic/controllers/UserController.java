@@ -83,6 +83,13 @@ public class UserController{
 					}
 					else{
 						message = "User Already Exists";
+						sessionFlag = sessionService.startSession(userId);
+						if(sessionFlag > 0){
+							LOG.info("Session Started Successfully");
+						}
+						else{
+							LOG.info("Session Can't be Started");
+						}
 					}
 				}catch(Exception e){
 					LOG.info("Error While Login : " + e);
@@ -112,24 +119,12 @@ public class UserController{
 		Message result = new Message();
 		String message = new String();
 		Integer flag = 0;
-		SongListen songListen = new SongListen();
 		if(session != null){
+			addSongListen(session);
 			try{
 				flag = sessionService.updateSession(session);
 				if(flag > 0){
 					message = "Session Updated Successfully";
-					songListen.setRating(session.getRating());
-					songListen.setUser_id(session.getUserId());
-					Song song = new Song();
-					song.setId(Integer.parseInt(session.getSession()));
-					songListen.setSong(song);
-					flag = songServices.addSongListen(songListen);
-					if(flag > 0){
-						LOG.info("Song Listen Updated");
-					}
-					else{
-						LOG.info("Somg Listen Not Updated");
-					}
 				}
 				else
 					message = "Session Can't Be Updated";
@@ -146,6 +141,28 @@ public class UserController{
 		return result;
 	}
 	
+	private Integer addSongListen(Session session) {
+		Integer flag = 0;
+		SongListen songListen = new SongListen();
+		if(session != null){
+			songListen.setRating(session.getRating());
+			songListen.setUser_id(session.getUserId());
+			Song song = new Song();
+			song.setId(Integer.parseInt(session.getSession()));
+			songListen.setSong(song);
+			flag = songServices.addSongListen(songListen);
+			if(flag > 0){
+				LOG.info("Song Listen Updated");
+			}
+			else{
+				LOG.info("Somg Listen Not Updated");
+			}
+		}
+		else{
+			LOG.info("Some Param Missing");
+		}
+		return flag;
+	}
 	@RequestMapping(value = "/{userId}/taste", method = RequestMethod.POST)
 	@ResponseBody
 	public Message setUserTaste(@PathVariable Integer userId, @RequestBody List<Song> songsList){

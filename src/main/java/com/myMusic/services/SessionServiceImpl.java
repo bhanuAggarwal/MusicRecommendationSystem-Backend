@@ -28,6 +28,12 @@ public class SessionServiceImpl implements SessionService{
 		Integer sessionFlag = 0;
 		if(userId != null){
 			sessionFlag = sessionMapper.startSession(userId);
+			if(sessionFlag > 0){
+				LOG.info("Session Started Successfully");
+			}
+			else{
+				LOG.info("Error While Starting Session");
+			}
 		}
 		else{
 			LOG.info("UserId is null");
@@ -42,6 +48,9 @@ public class SessionServiceImpl implements SessionService{
 		if(session != null){
 			try{
 				currentSession = sessionMapper.getUserCurrentSession(session.getUserId());
+				if(currentSession.getSession().charAt(currentSession.getSession().length() - 1) == session.getSession().charAt(0)){
+					return 1;
+				}
 				session.setId(currentSession.getId());
 				if(!currentSession.getSession().equals("")){
 					session.setSession(currentSession.getSession() + "," + session.getSession());
