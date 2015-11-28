@@ -37,4 +37,7 @@ public interface UserMapper {
 	
 	@Select("SELECT * FROM user_taste WHERE user_id = #{userId}")
 	public UserTaste getUserTaste(Integer userId);
+	
+	@Select("SELECT id FROM category_master WHERE name = #{category}")
+	public Integer getCategoryByName(String category);
 }

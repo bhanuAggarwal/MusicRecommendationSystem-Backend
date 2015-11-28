@@ -11,7 +11,7 @@ public class Song {
 	Integer id;
 	String name;
 	String location;
-	Integer category;
+	String category;
 	String artist;
 	Double rating;
 	Integer no_rating;
@@ -21,7 +21,7 @@ public class Song {
 		super();
 	}
 
-	public Song(Integer id, String name, String location, Integer category,
+	public Song(Integer id, String name, String location, String category,
 			String artist, Double rating, Integer no_rating ,String tags) {
 		super();
 		this.id = id;
@@ -65,11 +65,11 @@ public class Song {
 		this.location = location;
 	}
 
-	public Integer getCategory() {
+	public String getCategory() {
 		return category;
 	}
 
-	public void setCategory(Integer category) {
+	public void setCategory(String category) {
 		this.category = category;
 	}
 

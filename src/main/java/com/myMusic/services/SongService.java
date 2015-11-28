@@ -19,7 +19,7 @@ public interface SongService {
 	Integer addSongListen(SongListen songListen);
 	List<Song> getPopularSongs();
 	List<Song> getNewSongs();
-	List<Song> getNextRecommendedSongs(Integer userId);
+	List<Song> getNextRecommendedSongs(Integer userId, Integer songId);
 	List<Song> getRecommendedSongsForUser(Integer userId);
 	Integer updateRatings();
 	List<Song> getSongsByDefault();

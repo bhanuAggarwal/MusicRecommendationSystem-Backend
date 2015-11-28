@@ -40,7 +40,8 @@ public class SongController {
 	@RequestMapping(value = "{type}", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Song> getPopularSongs(@PathVariable String type,
-			@RequestParam(value = "userId" , required = false) Integer userId){
+			@RequestParam(value = "userId" , required = false) Integer userId,
+			@RequestParam(value = "songId" , required = false) Integer songId){
 		List<Song> list = new ArrayList<Song>();
 		if(type != null){
 			try{
@@ -51,7 +52,7 @@ public class SongController {
 					list = songService.getNewSongs();
 				}
 				else if(type.equals("nextRecommended")){
-					list = songService.getNextRecommendedSongs(userId);
+					list = songService.getNextRecommendedSongs(userId,songId);
 				}
 				else if(type.equals("recommendedForUser")){
 					list = songService.getRecommendedSongsForUser(userId);

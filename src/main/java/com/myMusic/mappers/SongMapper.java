@@ -25,8 +25,8 @@ public interface SongMapper {
 			+ "VALUES(#{name},#{location},#{category},#{artist},#{rating},#{tags})")
 	Integer uploadSong(Song song);
 
-	@Select("SELECT s.id, s.name, s.location, s.category, s.artist, s.rating"
-			+ " FROM songs s JOIN sample_songs ss ON s.id = ss.song_id")
+	@Select("SELECT s.id, s.name, s.location, cm.name AS \"category\", s.artist, s.rating"
+			+ " FROM songs s JOIN sample_songs ss ON s.id = ss.song_id JOIN category_master cm ON cm.id = s.category ")
 	List<Song> getSampleSongsList();
 	
 	@Insert("INSERT INTO song_listen(user_id, song_id, rating) "
@@ -41,7 +41,8 @@ public interface SongMapper {
 	
 	//TODO: Map columns To object
 	@Select("SELECT sl.id , sl.user_id, sl.rating , s.category AS \" song.category\", "
-			+ "s.artist AS \" song.artist\" , s.id AS \"song.id\" "
+			+ "s.artist AS \" song.artist\" , s.id AS \"song.id\" , s.no_rating AS \"song.no_rating\", "
+			+ "s.rating AS \"song.rating\" "
 			+ " FROM song_listen sl JOIN songs s ON sl.song_id = s.id")
 	List<SongListen> getSongsListen();
 
@@ -54,8 +55,8 @@ public interface SongMapper {
 	@Select("SELECT * FROM songs")
 	List<Song> getSongsByDefault();
 
-	@Select("SELECT * FROM songs WHERE category = #{category} ORDER BY rating DESC LIMIT #{limitCategory_1} ")
-	List<Song> getSongsByCategory(@Param("limitCategory_1") Integer limitCategory_1,
+	@Select("SELECT * FROM songs WHERE category = #{category} ORDER BY rating DESC LIMIT #{limit} ")
+	List<Song> getSongsByCategory(@Param("limit") Integer limit,
 			@Param("category") Integer category);
 
 	@Delete("DELETE FROM song_listen WHERE 1")

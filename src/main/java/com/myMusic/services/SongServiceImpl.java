@@ -106,8 +106,12 @@ public class SongServiceImpl implements SongService{
 	@Override
 	public List<Song> getPopularSongs() {
 		List<Song> songsList = new ArrayList<Song>();
+		List<Song> temp = new ArrayList<Song>();
 		try{
 			songsList  = songMapper.getPopularSongs();
+			for(int i = 0; i < 9; i++){
+				temp.add(i, songsList.get(i));
+			}
 			if(songsList != null)
 				LOG.info("Songs List Retrieved Successfully");
 			else
@@ -115,7 +119,7 @@ public class SongServiceImpl implements SongService{
 		}catch(Exception e){
 			LOG.info("Error in Song Services " + e);
 		}
-		return songsList;
+		return temp;
 	}
 
 	@Override
@@ -134,11 +138,12 @@ public class SongServiceImpl implements SongService{
 	}
 
 	@Override
-	public List<Song> getNextRecommendedSongs(Integer userId) {
+	public List<Song> getNextRecommendedSongs(Integer userId, Integer songId) {
 		List<Song> songsList = new ArrayList<Song>();
 		HashMap<String,Integer> songMap = new HashMap<String, Integer>();
 		Session previousSession = new Session();
 		String sessionString;
+		int i = 0;
 		List<String> sessionsList = new ArrayList<String>();
 		if(userId != null){
 			try{
@@ -154,7 +159,7 @@ public class SongServiceImpl implements SongService{
 					sessionString = "%" + previousSession.getSession() + ",%";
 					sessionsList = sessionService.getSimilarSessions(sessionString);
 				}
-				for(int i = 0; i < sessionsList.size(); i++){
+				for(i = 0; i < sessionsList.size(); i++){
 					String[] sessionTemp = sessionsList.get(i).split(previousSession.getSession() + ",");
 					sessionsList.set(i, sessionTemp[1]);
 					sessionTemp = sessionsList.get(i).split(",");
@@ -168,10 +173,25 @@ public class SongServiceImpl implements SongService{
 				Map<String,Integer> Map = sortByComparator(songMap);
 				Set<String> songsSet = Map.keySet();
 				Iterator<String> it = songsSet.iterator();
-				for(int i = 0; i < songsSet.size(); i++){
+				i = 0;
+				for(i = 0; i < songsSet.size(); i++){
 					songsList.add(i, songMapper.getSongById(Integer.parseInt(it.next().toString())));
-				}	
+				}
+				if(songId != null)
+					songsList.add(i , songMapper.getSongById(songId));
 				Collections.reverse(songsList);
+				if(songsList.size() < 9){
+					try{
+						int limit = 9 - songsList.size();
+						List<Song> songTemp = songMapper.getSongsByCategory(limit,Integer.parseInt(songsList.get(0).getCategory()));
+						if(songTemp != null){
+							LOG.info("Song List Generated ");
+						}
+						songsList.addAll(songTemp);
+					}catch(Exception e){
+						LOG.info("Error in Songs Service " + e);
+					}
+				}
 			}catch(Exception e){
 				LOG.info("Error in Song Services " + e);
 			}
@@ -208,22 +228,92 @@ public class SongServiceImpl implements SongService{
 	@Override
 	public List<Song> getRecommendedSongsForUser(Integer userId) {
 		List<Song> songsList = new ArrayList<Song>();
-		List<Song> listTemp = new ArrayList<Song>();
-		UserTaste userTaste = new UserTaste();;
+		UserTaste userTaste = new UserTaste();
 		if(userId != null){
 			try{
 				userTaste = userService.getUserTaste(userId);
 				if(userTaste != null){
-					for(int i = 1; i <= 10; i++){
-						listTemp = songMapper.getSongsByCategory((int)(userTaste.getCategory_1()*100),i);
-						if(listTemp != null){
-							LOG.info("Category " + i + " List Generated");
-							songsList.addAll(listTemp);
-						}
-						else{
-							LOG.info("Category "+ i +" List Can't be Generated");
-						}
+					List<Song> listTemp1 = songMapper.getSongsByCategory((int)(userTaste.getCategory_1()*100),1);
+					if(listTemp1 != null){
+						LOG.info("Category " + 1 + " List Generated");
+						songsList.addAll(listTemp1);
 					}
+					else{
+						LOG.info("Category "+ 1 +" List Can't be Generated");
+					}
+					List<Song> listTemp2 = songMapper.getSongsByCategory((int)(userTaste.getCategory_2()*100),2);
+					if(listTemp2 != null){
+						LOG.info("Category " + 2 + " List Generated");
+						songsList.addAll(listTemp2);
+					}
+					else{
+						LOG.info("Category "+ 2 +" List Can't be Generated");
+					}
+					List<Song> listTemp3 = songMapper.getSongsByCategory((int)(userTaste.getCategory_3()*100),3);
+					if(listTemp3 != null){
+						LOG.info("Category " + 3 + " List Generated");
+						songsList.addAll(listTemp3);
+					}
+					else{
+						LOG.info("Category "+ 3 +" List Can't be Generated");
+					}
+					List<Song> listTemp4 = songMapper.getSongsByCategory((int)(userTaste.getCategory_4()*100),4);
+					if(listTemp4 != null){
+						LOG.info("Category " + 4 + " List Generated");
+						songsList.addAll(listTemp4);
+					}
+					else{
+						LOG.info("Category "+ 4 +" List Can't be Generated");
+					}
+					List<Song> listTemp5 = songMapper.getSongsByCategory((int)(userTaste.getCategory_5()*100),5);
+					if(listTemp5 != null){
+						LOG.info("Category " + 5 + " List Generated");
+						songsList.addAll(listTemp5);
+					}
+					else{
+						LOG.info("Category "+ 5 +" List Can't be Generated");
+					}
+					List<Song> listTemp6 = songMapper.getSongsByCategory((int)(userTaste.getCategory_6()*100),6);
+					if(listTemp6 != null){
+						LOG.info("Category " + 6 + " List Generated");
+						songsList.addAll(listTemp6);
+					}
+					else{
+						LOG.info("Category "+ 6 +" List Can't be Generated");
+					}
+					List<Song> listTemp7 = songMapper.getSongsByCategory((int)(userTaste.getCategory_7()*100),7);
+					if(listTemp7 != null){
+						LOG.info("Category " + 7 + " List Generated");
+						songsList.addAll(listTemp7);
+					}
+					else{
+						LOG.info("Category "+ 7 +" List Can't be Generated");
+					}
+					List<Song> listTemp8 = songMapper.getSongsByCategory((int)(userTaste.getCategory_8()*100),8);
+					if(listTemp8 != null){
+						LOG.info("Category " + 8 + " List Generated");
+						songsList.addAll(listTemp8);
+					}
+					else{
+						LOG.info("Category "+ 8 +" List Can't be Generated");
+					}
+					List<Song> listTemp9 = songMapper.getSongsByCategory((int)(userTaste.getCategory_9()*100),9);
+					if(listTemp9 != null){
+						LOG.info("Category " + 9 + " List Generated");
+						songsList.addAll(listTemp9);
+					}
+					else{
+						LOG.info("Category "+ 9 +" List Can't be Generated");
+					}
+					List<Song> listTemp10 = songMapper.getSongsByCategory((int)(userTaste.getCategory_10()*100),10);
+					if(listTemp10 != null){
+						LOG.info("Category " + 10 + " List Generated");
+						songsList.addAll(listTemp10);
+					}
+					else{
+						LOG.info("Category "+ 10 +" List Can't be Generated");
+					}
+					
 					Collections.sort(songsList,new SongComparator());
 				}
 				else{
@@ -266,7 +356,7 @@ public class SongServiceImpl implements SongService{
 		try{
 			list = songMapper.getSongsListen();
 			for(int i = 0; i < list.size(); i++){
-				if(userMap.containsKey(list.get(i).getUser_id())){
+				if(!userMap.containsKey(list.get(i).getUser_id())){
 					userMap.put(list.get(i).getUser_id(), new ArrayList<Song>());
 					userIdList.add(list.get(i).getUser_id());
 				}

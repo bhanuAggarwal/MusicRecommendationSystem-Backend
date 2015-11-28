@@ -80,6 +80,9 @@ public class UserServiceImpl implements UserService{
 		Integer flag = 0;
 		UserTaste userTaste = new UserTaste();
 		if(userId != null && songsList != null){
+			for(int i = 0; i < songsList.size(); i++){
+				songsList.get(i).setCategory(userMapper.getCategoryByName(songsList.get(i).getCategory()).toString());
+			}
 			userTaste = setUserTasteObject(userId, songsList);
 			try{
 				flag = userMapper.addUserTaste(userTaste);
@@ -165,6 +168,8 @@ public class UserServiceImpl implements UserService{
 				rating /= previousUserTaste.getCount() + userTaste.getCount();
 				userTaste.setCategory_10(rating);
 				
+				if(userTaste != null)
+					flag = 1;
 			}catch(Exception e){
 				LOG.info("Error While Updating User Taste " + e);
 			}
@@ -194,7 +199,7 @@ public class UserServiceImpl implements UserService{
 				for(int i = 0; i < songsList.size(); i++){
 					totalRatings += songsList.get(i).getRating();
 					userTaste.setCount(userTaste.getCount() + 1);
-					switch(songsList.get(i).getCategory()){
+					switch(Integer.parseInt(songsList.get(i).getCategory())){
 						case 1:
 							userTaste.setCategory_1(songsList.get(i).getRating() + userTaste.getCategory_1());
 							break;
