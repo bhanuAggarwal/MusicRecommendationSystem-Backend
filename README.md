@@ -17,7 +17,7 @@ The system is based on Session Tracking/Similarity and technique of probability 
 <ol>
   <li> Tomcat Server </li>
   <li> Java 1.7 </li>
-  <li> MySQl -Database <li>
+  <li> MySQl -Database </li>
   <li> Maven - For Compilation </li>
 </ol>
 
